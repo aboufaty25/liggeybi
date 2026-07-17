@@ -1,0 +1,5 @@
+RewriteEngine On
+
+# Si le sitemap existe, le servir directement, sinon rediriger vers l'application Node.js
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*\.xml)$ http://127.0.0.1:3000/$1 [P,L]

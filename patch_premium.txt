@@ -1,0 +1,19 @@
+167,181c167,175
+                  {cv.cvUrl && (
+                    <div className="mb-4 relative w-full h-32 rounded-xl overflow-hidden border border-gray-100 bg-gray-50 flex flex-col items-center justify-center group/pdf">
+                      <div className="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mb-2">
+                        <FileText className="w-6 h-6 text-emerald-700 opacity-80" />
+                      </div>
+                      <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest flex items-center gap-1 group-hover/pdf:text-emerald-700 transition-colors">
+                        <Eye className="w-3 h-3" /> Aperçu CV
+                      </span>
+                    </div>
+                  )}
+.
+256,259c256,259
+               <iframe 
+                  src={selectedCv}
+                  className="absolute inset-0 w-full h-full border-0 bg-white"
+                  title="PDF Preview"
+               />
+.

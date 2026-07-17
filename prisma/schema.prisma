@@ -1,0 +1,320 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String            @id @default(cuid())
+  email           String            @unique
+  password        String?
+  name            String?
+  role            String            @default("CANDIDAT")
+  image           String?           @db.Text
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  credits         Int               @default(0)
+  candidatures    Candidature[]
+  chapterProgress ChapterProgress[]
+  offres          Offre[]
+  orders          Order[]
+  products        Product[]
+  profile         Profile?
+  formations      UserFormation[]
+}
+
+model Product {
+  id          String           @id @default(cuid())
+  userId      String
+  titre       String
+  slug        String           @unique
+  description String           @db.LongText
+  prix        Float
+  prixPromo   Float?
+  type        String           @default("PHYSICAL")
+  fileUrl     String?          @db.Text
+  imageUrl    String?          @db.Text
+  stock       Int              @default(0)
+  isPublished Boolean          @default(false)
+  categoryId  String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  orders      Order[]
+  category    ProductCategory? @relation(fields: [categoryId], references: [id])
+  user        User             @relation(fields: [userId], references: [id])
+
+  @@index([categoryId], map: "Product_categoryId_fkey")
+  @@index([userId], map: "Product_userId_fkey")
+}
+
+model ProductCategory {
+  id          String    @id @default(cuid())
+  nom         String    @unique
+  slug        String    @unique
+  description String?   @db.Text
+  createdAt   DateTime  @default(now())
+  products    Product[]
+}
+
+model Order {
+  id              String   @id @default(cuid())
+  userId          String?
+  customerName    String
+  customerEmail   String?
+  customerPhone   String
+  productId       String
+  quantity        Int      @default(1)
+  totalAmount     Float
+  status          String   @default("PENDING")
+  paydunyaToken   String?  @unique
+  paydunyaReceipt String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  emailSent       Boolean  @default(false)
+  product         Product  @relation(fields: [productId], references: [id])
+  user            User?    @relation(fields: [userId], references: [id])
+
+  @@index([productId], map: "Order_productId_fkey")
+  @@index([userId], map: "Order_userId_fkey")
+}
+
+model Profile {
+  id                String  @id @default(cuid())
+  userId            String  @unique
+  nom               String?
+  prenom            String?
+  telephone         String?
+  ville             String?
+  pays              String?
+  titre             String?
+  bio               String? @db.Text
+  competences       String? @db.Text
+  secteurs          String?
+  linkedin          String?
+  portfolio         String?
+  cvUrl             String? @db.Text
+  entreprise        String?
+  logoUrl           String? @db.Text
+  siteWeb           String?
+  secteurEntreprise String?
+  isPremium         Boolean @default(false)
+  premiumUntil      DateTime?
+  packageId         String?
+  canUploadCv       Boolean @default(false)
+  user              User    @relation(fields: [userId], references: [id])
+}
+
+model CvPackage {
+  id          String   @id @default(cuid())
+  nom         String
+  description String?  @db.Text
+  prix        Float    @default(0)
+  options     String?  @db.Text
+  actif       Boolean  @default(true)
+  dureeJours  Int      @default(30)
+  type        String   @default("BOOST") // DEPOT or BOOST
+  createdAt   DateTime @default(now())
+}
+
+model CvOrder {
+  id        String   @id @default(cuid())
+  profileId String
+  packageId String
+  userId    String
+  montant   Float
+  status    String   @default("PENDING")
+  token     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Candidature {
+  id               String   @id @default(cuid())
+  userId           String
+  articleSlug      String
+  articleTitre     String
+  articleCategorie String
+  type             String
+  statut           String   @default("en_attente")
+  motivation       String?  @db.Text
+  cvUrl            String?  @db.Text
+  linkedin         String?
+  recruteurEmail   String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  user             User     @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "Candidature_userId_fkey")
+}
+
+model Offre {
+  id              String    @id @default(cuid())
+  userId          String
+  titre           String
+  categorie       String
+  sousCategorie   String?
+  description     String    @db.LongText
+  lieu            String?
+  modeTravail     String?   @default("Sur site")
+  typeContrat     String?
+  salaire         String?
+  niveauEtude     String?
+  dateExpiration  DateTime?
+  emailContact    String?
+  lienExterne     String?   @db.Text
+  modeCandidature String    @default("interne")
+  statut          String    @default("en_attente")
+  entreprise      String?
+  logoUrl         String?   @db.Text
+  imageUrl        String?   @db.Text
+  createdAt       DateTime  @default(now())
+  seoDescription  String?   @db.Text
+  tags            String?   @db.Text
+  experience      String?
+  slug            String?   @unique
+  isPremium       Boolean   @default(false)
+  packageId       String?
+  premiumUntil    DateTime?
+  isUrgent        Boolean   @default(false)
+  updatedAt       DateTime  @default(now()) @updatedAt
+  user            User      @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "Offre_userId_fkey")
+}
+
+model JobPackage {
+  id          String   @id @default(cuid())
+  nom         String
+  description String?  @db.Text
+  prix        Float    @default(0)
+  options     String?  @db.Text
+  actif       Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  credits     Int      @default(0)
+}
+
+model JobOrder {
+  id        String   @id @default(cuid())
+  offreId   String?
+  packageId String
+  userId    String
+  montant   Float
+  status    String   @default("PENDING")
+  token     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AdConfig {
+  id    String  @id
+  slot  String  @unique
+  nom   String
+  actif Boolean @default(true)
+}
+
+model PromoBanner {
+  id          String   @id @default(cuid())
+  titre       String
+  description String?
+  imageUrl    String   @db.Text
+  linkUrl     String?  @db.Text
+  location    String   @default("HOME")
+  actif       Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  productIds  String?  @db.Text
+  type        String   @default("AD")
+}
+
+model SiteConfig {
+  key   String @id
+  value String @db.Text
+}
+
+model Formation {
+  id           String          @id @default(cuid())
+  titre        String
+  slug         String          @unique
+  description  String          @db.LongText
+  imageUrl     String?         @db.Text
+  videoUrl     String?         @db.Text
+  prix         Float           @default(0)
+  isPublished  Boolean         @default(false)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  prixPromo    Float?
+  categorie    String?
+  chapitres    Chapitre[]
+  quiz         FormationQuiz?
+  inscriptions UserFormation[]
+}
+
+model Chapitre {
+  id           String            @id @default(cuid())
+  formationId  String
+  titre        String
+  ordre        Int
+  description  String?           @db.LongText
+  videoUrl     String?           @db.Text
+  imageUrl     String?           @db.Text
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  formation    Formation         @relation(fields: [formationId], references: [id], onDelete: Cascade)
+  progressions ChapterProgress[]
+
+  @@index([formationId], map: "Chapitre_formationId_fkey")
+}
+
+model UserFormation {
+  id            String    @id @default(cuid())
+  userId        String
+  formationId   String
+  progression   Int       @default(0)
+  status        String    @default("EN_COURS")
+  certificatUrl String?   @db.Text
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  score         Int       @default(0)
+  paydunyaToken String?   @unique
+  formation     Formation @relation(fields: [formationId], references: [id], onDelete: Cascade)
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, formationId])
+  @@index([formationId], map: "UserFormation_formationId_fkey")
+}
+
+model ChapterProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  chapitreId  String
+  isCompleted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  chapitre    Chapitre @relation(fields: [chapitreId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, chapitreId])
+  @@index([chapitreId], map: "ChapterProgress_chapitreId_fkey")
+}
+
+model FormationQuiz {
+  id          String         @id @default(cuid())
+  formationId String         @unique
+  titre       String
+  description String?        @db.Text
+  formation   Formation      @relation(fields: [formationId], references: [id], onDelete: Cascade)
+  questions   QuizQuestion[]
+}
+
+model QuizQuestion {
+  id                 String        @id @default(cuid())
+  quizId             String
+  question           String
+  options            String        @db.Text
+  correctOptionIndex Int
+  quiz               FormationQuiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@index([quizId], map: "QuizQuestion_quizId_fkey")
+}

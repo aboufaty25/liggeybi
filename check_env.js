@@ -1,0 +1,1 @@
+console.log("VITE_WORDPRESS_GRAPHQL_URL", process.env.VITE_WORDPRESS_GRAPHQL_URL);

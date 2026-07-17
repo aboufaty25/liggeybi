@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /candidat
+Disallow: /recruteur
+Sitemap: https://www.liggeybi.com/sitemap.xml
