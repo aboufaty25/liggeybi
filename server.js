@@ -3091,95 +3091,102 @@ async function startServer() {
       "/recruteur",
       "/candidat"
     ].includes(req.path);
-    if (offreMatch && !req.path.includes(".")) {
-      const jobId = String(req.query.id || offreMatch[1]);
+    const formationMatch = !offreMatch && req.path.match(/^\/formations\/([^\/]+)/);
+    if ((offreMatch || formationMatch) && !req.path.includes(".")) {
+      const isFormation = !!formationMatch;
+      const slug = String(req.query.id || (offreMatch ? offreMatch[1] : formationMatch[1]));
       try {
-        const job = await prisma_default.offre.findFirst({
-          where: { OR: [{ id: jobId }, { slug: jobId }] }
-        });
-        if (job) {
-          const desc = job.description ? job.description.replace(/<[^>]*>/g, "").substring(0, 200).replace(/\n/g, " ") : "Trouvez les meilleures offres sur Liggeybi.";
-          const rawImg = job.imageUrl || job.logoUrl || "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200";
+        console.log("Matched route", req.path, { isFormation, slug });
+        let item = null;
+        if (isFormation) {
+          item = await prisma_default.formation.findFirst({ where: { OR: [{ id: slug }, { slug }] } });
+        } else {
+          item = await prisma_default.offre.findFirst({ where: { OR: [{ id: slug }, { slug }] } });
+        }
+        if (item) {
+          const desc = item.description ? item.description.replace(/<[^>]*>/g, "").substring(0, 200).replace(/\n/g, " ") : "Trouvez les meilleures opportunit\xE9s sur Liggeybi.";
+          const rawImg = item.imageUrl || item.logoUrl || "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200";
           const img = rawImg.startsWith("http") ? rawImg : "https://www.liggeybi.com" + (rawImg.startsWith("/") ? rawImg : "/" + rawImg);
-          const title = job.titre + " | Liggeybi";
+          const title = item.titre + " | Liggeybi";
           const url = "https://www.liggeybi.com" + req.originalUrl;
           const encodedImg = encodeURI(img);
-          const numericSalary = job.salaire && typeof job.salaire === "string" ? parseFloat(job.salaire.replace(/[^0-9.]/g, "")) : null;
-          const htmlDescription = job.description ? job.description.includes("<") ? job.description : `<p>${job.description.replace(/\n/g, "<br/>")}</p>` : `<p>${desc}</p>`;
+          const numericSalary = !isFormation && item.salaire && typeof item.salaire === "string" ? parseFloat(item.salaire.replace(/[^0-9.]/g, "")) : null;
+          const htmlDescription = item.description ? item.description.includes("<") ? item.description : `<p>${item.description.replace(/\n/g, "<br/>")}</p>` : `<p>${desc}</p>`;
           const countryCode = "SN";
-          const jobPostingSchema = {
-            "@context": "https://schema.org/",
-            "@type": "JobPosting",
-            title: job.titre || "Offre d'emploi",
-            image: encodedImg,
-            description: htmlDescription,
-            // Google requires full HTML description
-            identifier: {
-              "@type": "PropertyValue",
-              name: job.entreprise || "Liggeybi",
-              value: String(job.id)
-            },
-            datePosted: job.createdAt.toISOString(),
-            validThrough: job.dateExpiration && !isNaN(new Date(job.dateExpiration).getTime()) ? new Date(job.dateExpiration).toISOString() : new Date(
-              new Date(job.createdAt).getTime() + 90 * 24 * 60 * 60 * 1e3
-            ).toISOString(),
-            employmentType: job.typeContrat === "CDI" ? "FULL_TIME" : job.typeContrat === "CDD" ? "CONTRACTOR" : job.typeContrat === "Freelance" ? "CONTRACTOR" : job.typeContrat === "Stage" ? "INTERN" : job.typeContrat === "Temps partiel" ? "PART_TIME" : "OTHER",
-            industry: job.categorie || "General",
-            ...job.lienExterne || job.emailContact ? {
-              directApply: true
-            } : {},
-            hiringOrganization: {
-              "@type": "Organization",
-              name: job.entreprise || "Liggeybi",
-              sameAs: "https://www.liggeybi.com",
-              logo: job.imageUrl ? job.imageUrl.startsWith("http") ? job.imageUrl : `https://www.liggeybi.com${job.imageUrl}` : job.logoUrl ? job.logoUrl.startsWith("http") ? job.logoUrl : `https://www.liggeybi.com${job.logoUrl}` : "https://www.liggeybi.com/logo.png"
-            },
-            jobLocation: {
-              "@type": "Place",
-              address: {
-                "@type": "PostalAddress",
-                addressLocality: job.lieu || "S\xE9n\xE9gal",
-                addressRegion: job.lieu || "Dakar",
-                addressCountry: countryCode
-              }
-            },
-            ...numericSalary && numericSalary > 0 ? {
-              baseSalary: {
-                "@type": "MonetaryAmount",
-                currency: "XOF",
-                value: {
-                  "@type": "QuantitativeValue",
-                  value: numericSalary,
-                  unitText: "MONTH"
+          let schemaTags = "";
+          if (!isFormation) {
+            const jobPostingSchema = {
+              "@context": "https://schema.org/",
+              "@type": "JobPosting",
+              title: item.titre || "Offre d'emploi",
+              image: encodedImg,
+              description: htmlDescription,
+              identifier: {
+                "@type": "PropertyValue",
+                name: item.entreprise || "Liggeybi",
+                value: String(item.id)
+              },
+              datePosted: item.createdAt.toISOString(),
+              validThrough: item.dateExpiration && !isNaN(new Date(item.dateExpiration).getTime()) ? new Date(item.dateExpiration).toISOString() : new Date(
+                new Date(item.createdAt).getTime() + 90 * 24 * 60 * 60 * 1e3
+              ).toISOString(),
+              employmentType: item.typeContrat === "CDI" ? "FULL_TIME" : item.typeContrat === "CDD" ? "CONTRACTOR" : item.typeContrat === "Freelance" ? "CONTRACTOR" : item.typeContrat === "Stage" ? "INTERN" : item.typeContrat === "Temps partiel" ? "PART_TIME" : "OTHER",
+              industry: item.categorie || "General",
+              ...item.lienExterne || item.emailContact ? {
+                directApply: true
+              } : {},
+              hiringOrganization: {
+                "@type": "Organization",
+                name: item.entreprise || "Liggeybi",
+                sameAs: "https://www.liggeybi.com",
+                logo: item.imageUrl ? item.imageUrl.startsWith("http") ? item.imageUrl : `https://www.liggeybi.com${item.imageUrl}` : item.logoUrl ? item.logoUrl.startsWith("http") ? item.logoUrl : `https://www.liggeybi.com${item.logoUrl}` : "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200"
+              },
+              jobLocation: {
+                "@type": "Place",
+                address: {
+                  "@type": "PostalAddress",
+                  addressLocality: item.lieu || "S\xE9n\xE9gal",
+                  addressRegion: item.lieu || "Dakar",
+                  addressCountry: countryCode
                 }
-              }
-            } : {},
-            ...job.modeTravail === "\xC0 distance" ? {
-              jobLocationType: "TELECOMMUTE",
-              applicantLocationRequirements: {
-                "@type": "Country",
-                name: "SN"
-              }
-            } : {}
-          };
+              },
+              ...numericSalary && numericSalary > 0 ? {
+                baseSalary: {
+                  "@type": "MonetaryAmount",
+                  currency: "XOF",
+                  value: {
+                    "@type": "QuantitativeValue",
+                    value: numericSalary,
+                    unitText: "MONTH"
+                  }
+                }
+              } : {},
+              ...item.modeTravail === "\xC0 distance" ? {
+                jobLocationType: "TELECOMMUTE",
+                applicantLocationRequirements: {
+                  "@type": "Country",
+                  name: "SN"
+                }
+              } : {}
+            };
+            schemaTags = `<script id="google-jobs-schema" type="application/ld+json">${JSON.stringify(jobPostingSchema).replace(/</g, "\\u003c")}</script>`;
+          }
           const seoHtml = `
-                  <title>\${title}</title>
-                  <meta name="description" content="\${desc}" />
-                  <meta property="og:title" content="\${title}" />
-                  <meta property="og:description" content="\${desc}" />
-                  <meta property="og:image" content="\${encodedImg}" />
-                  <meta property="og:image:secure_url" content="\${encodedImg}" />
+                  <title>${title}</title>
+                  <meta name="description" content="${desc}" />
+                  <meta property="og:title" content="${title}" />
+                  <meta property="og:description" content="${desc}" />
+                  <meta property="og:image" content="${encodedImg}" />
+                  <meta property="og:image:secure_url" content="${encodedImg}" />
                   <meta property="og:image:width" content="1200" />
                   <meta property="og:image:height" content="630" />
-                  <meta property="og:url" content="\${url}" />
+                  <meta property="og:url" content="${url}" />
                   <meta property="og:type" content="article" />
                   <meta name="twitter:card" content="summary_large_image" />
-                  <meta name="twitter:title" content="\${title}" />
-                  <meta name="twitter:description" content="\${desc}" />
-                  <meta name="twitter:image" content="\${encodedImg}" />
-                  <script id="google-jobs-schema" type="application/ld+json">
-                    \${JSON.stringify(jobPostingSchema).replace(/</g, "\\u003c")}
-                  </script>
+                  <meta name="twitter:title" content="${title}" />
+                  <meta name="twitter:description" content="${desc}" />
+                  <meta name="twitter:image" content="${encodedImg}" />
+                  ${schemaTags}
                 `;
           const isProd2 = process.env.NODE_ENV === "production" || process.env.VITE_PROD === "true";
           let templateContent = "";
