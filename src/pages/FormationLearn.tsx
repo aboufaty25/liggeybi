@@ -32,9 +32,6 @@ function ArticlePlayer({ chapter, onComplete }: { chapter: any, onComplete: () =
        {chapter.description && chapter.description !== '<p><br></p>' && (
           <SafeHtml html={chapter.description} className="prose sm:prose-lg max-w-none text-gray-700 mb-8 sm:mb-12 w-full break-words prose-img:max-w-full prose-img:h-auto overflow-hidden" />
        )}
-       <div className="mt-8 mb-8">
-          <AdBanner slot="4567341711" format="fluid" />
-       </div>
        <div className="flex justify-end pt-6 border-t border-gray-100">
           <button onClick={onComplete} className="w-full sm:w-auto bg-[#006837] hover:bg-[#004d29] text-white font-bold py-3 sm:py-4 px-4 sm:px-8 rounded-xl shadow-lg transition-colors flex items-center justify-center sm:justify-start gap-2 text-sm sm:text-base">
              Marquer comme terminé et continuer <ChevronRight size={20} className="shrink-0" />
@@ -450,9 +447,6 @@ export default function FormationLearn() {
                 <div><p className={`text-sm font-semibold ${showQuiz ? 'text-indigo-600' : 'text-gray-900'}`}>Évaluation Finale</p></div>
              </button>
           )}
-          <div className="p-4 hidden md:block">
-             <AdBanner slot="4411002421" format="rectangle" />
-          </div>
         </div>
       </div>
 

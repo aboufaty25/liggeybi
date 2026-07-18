@@ -235,9 +235,6 @@ export function DestinationTopic() {
         </form>
       </div>
 
-      <div className="w-full flex justify-center my-8 px-4 max-w-7xl mx-auto">
-        <AdBanner slot="4411002421" format="auto" />
-      </div>
 
       {/* Main Content Layout */}
       <div className="max-w-7xl mx-auto px-4 mt-12 grid lg:grid-cols-12 gap-8 items-start">
@@ -338,10 +335,6 @@ export function DestinationTopic() {
            {/* Sidebar Widgets (SunuCV, Import CV, Booster, etc.) */}
            <SidebarWidgets />
 
-           {/* Ad Block */}
-           <div className="w-full h-[600px] border border-gray-100 rounded-3xl bg-white overflow-hidden p-0 flex items-center justify-center sticky top-24">
-             <AdBanner slot="7547413607" format="vertical" />
-           </div>
         </div>
 
       </div>

@@ -445,9 +445,6 @@ https://www.liggeybi.com`
               </section>
             )}
 
-            <div className="py-8 border-t border-gray-100">
-               <AdBanner slot="7547413607" />
-            </div>
 
             <SunucvBanner />
 

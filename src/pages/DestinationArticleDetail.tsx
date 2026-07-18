@@ -155,10 +155,6 @@ export function DestinationArticleDetail() {
         `}</style>
       </Helmet>
 
-      {/* AD TOP: en haut avant tout contenu, juste apres le header global */}
-      <div className="w-full flex justify-center bg-transparent mt-4 mb-4 px-4 max-w-7xl mx-auto">
-          <AdBanner slot="4411002421" format="auto" />
-      </div>
 
       {/* Hero Header Area */}
       <div className={`w-full py-12 md:py-20 relative overflow-hidden ${isCanada ? 'bg-gradient-to-br from-red-600 to-red-900' : 'bg-gradient-to-br from-indigo-800 to-indigo-950'}`}>
@@ -251,7 +247,6 @@ export function DestinationArticleDetail() {
                      <SidebarWidgets />
 
                      {/* AD BOTTOM INSIDE SIDEBAR */}
-                     <AdBanner slot="7547413607" format="vertical" />
                   </div>
                </div>
             </div>

@@ -127,7 +127,6 @@ export default function FormationDetail() {
 
       <div className="max-w-6xl mx-auto px-4 py-12 grid md:grid-cols-3 gap-12 min-w-0">
         <div className="md:col-span-2 space-y-8 min-w-0">
-           <AdBanner slot="7547413607" />
            
            {formation.description && (
              <div className="bg-white rounded-2xl p-4 sm:p-8 border shadow-sm border-gray-100 overflow-hidden">

@@ -2378,18 +2378,6 @@ async function startServer() {
         const defaultSlots = [
           {
             id: "ad_" + Math.random().toString(36).substring(2, 9),
-            slot: "4411002421",
-            nom: "D\xE9tails Header",
-            actif: true
-          },
-          {
-            id: "ad_" + Math.random().toString(36).substring(2, 9),
-            slot: "7547413607",
-            nom: "D\xE9tails Content",
-            actif: true
-          },
-          {
-            id: "ad_" + Math.random().toString(36).substring(2, 9),
             slot: "3384697577",
             nom: "Home Banner",
             actif: true
@@ -2416,12 +2404,6 @@ async function startServer() {
             id: "ad_" + Math.random().toString(36).substring(2, 9),
             slot: "2905716196",
             nom: "Footer Ad",
-            actif: true
-          },
-          {
-            id: "ad_" + Math.random().toString(36).substring(2, 9),
-            slot: "4567341711",
-            nom: "Autre emplacement",
             actif: true
           }
         ];
@@ -2469,14 +2451,11 @@ async function startServer() {
     res.json({
       autoAds: true,
       slots: {
-        "4411002421": true,
-        "7547413607": true,
         "3384697577": true,
         "5682206784": true,
         "7733655057": true,
         "8855681955": true,
-        "2905716196": true,
-        "4567341711": true
+        "2905716196": true
       }
     });
   });

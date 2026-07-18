@@ -269,11 +269,6 @@ export function CategoryPage() {
                 {posts.map((post, index) => (
                   <React.Fragment key={post.id}>
                     <JobCard post={post} />
-                    {index === 5 && (
-                      <div className="col-span-full py-4">
-                        <AdBanner slot="4567341711" />
-                      </div>
-                    )}
                   </React.Fragment>
                 ))}
               </div>
