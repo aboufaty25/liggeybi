@@ -23,11 +23,7 @@ export function SidebarWidgets() {
          </div>
          <h3 className="text-xl font-black text-slate-900 mb-2">Promouvoir mon CV</h3>
          <p className="text-slate-500 text-sm mb-6 font-medium leading-tight">Augmentez votre visibilité et soyez chassé directement par notre réseau de recruteurs.</p>
-         <Link to="/candidat" className="w-full">
-           <Button variant="outline" className="w-full border-2 border-amber-200 text-amber-900 hover:border-amber-400 hover:bg-amber-500 hover:text-white transition-all duration-300 font-black rounded-xl">
-             Importer mon CV
-           </Button>
-         </Link>
+         <Button nativeButton={false} render={<Link to="/candidat" className="w-full" />} variant="outline" className="w-full border-2 border-amber-200 text-amber-900 hover:border-amber-400 hover:bg-amber-500 hover:text-white transition-all duration-300 font-black rounded-xl">Importer mon CV</Button>
       </div>
 
       {/* Promotion SunuCV */}
@@ -115,11 +111,7 @@ export function SidebarWidgets() {
          <div className="relative z-10 flex-col w-full">
            <h3 className="text-xl font-black text-white mb-2">Vous recrutez ?</h3>
            <p className="text-slate-400 text-sm mb-6 font-medium">Trouvez les meilleurs talents et accédez à notre CVthèque.</p>
-           <Link to="/recruteur" className="w-full">
-             <Button className="w-full bg-[#006837] hover:bg-[#004d29] text-white font-black rounded-xl transition-colors">
-               Publier une offre
-             </Button>
-           </Link>
+           <Button nativeButton={false} render={<Link to="/recruteur" className="w-full" />} className="w-full bg-[#006837] hover:bg-[#004d29] text-white font-black rounded-xl transition-colors">Publier une offre</Button>
          </div>
       </div>
 
@@ -136,11 +128,7 @@ export function SidebarWidgets() {
            <h3 className="text-xl font-black mb-2 text-white">Alertes WhatsApp</h3>
            <p className="text-emerald-50 text-xs mb-6 max-w-2xl font-medium">Recevez directement sur WhatsApp les dernières offres.</p>
            
-           <a href={siteConfig.whatsapp_channel_url || "https://whatsapp.com/channel/0029Vb5e4tw4inotGoAu0A0r"} target="_blank" rel="noopener noreferrer" className="w-full">
-             <Button className="w-full bg-white hover:bg-slate-50 text-[#075E54] font-black rounded-xl shadow-xl transition-transform hover:scale-105">
-               S'abonner
-             </Button>
-           </a>
+           <Button nativeButton={false} render={<a href={siteConfig.whatsapp_channel_url || "https://whatsapp.com/channel/0029Vb5e4tw4inotGoAu0A0r"} target="_blank" rel="noopener noreferrer" className="w-full" />} className="w-full bg-white hover:bg-slate-50 text-[#075E54] font-black rounded-xl shadow-xl transition-transform hover:scale-105">S'abonner</Button>
          </div>
       </div>
     </div>

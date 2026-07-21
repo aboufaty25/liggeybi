@@ -561,29 +561,31 @@ export function RecruiterDashboard() {
                     <div className="space-y-4 md:col-span-2 bg-yellow-50/50 p-6 rounded-2xl border border-yellow-200">
                       <Label className="text-sm font-black uppercase tracking-widest text-yellow-900">Visibilité de l'annonce</Label>
                       <p className="text-xs text-yellow-700 font-bold mb-4">Combien de crédits souhaitez-vous dépenser pour cette offre ? L'utilisation de plus de crédits permet d'atteindre plus de candidats.</p>
-                      <div className="grid sm:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-3 gap-2 md:gap-4">
                         {[
                           { id: 'standard', name: 'Standard', desc: 'Publication normale', cost: 0, color: 'border-yellow-200 bg-white hover:border-yellow-300' },
                           { id: 'urgent', name: 'Urgent', desc: 'Logo "Urgent" et mis en avant', cost: 2, color: 'border-orange-200 bg-orange-50 hover:border-orange-400' },
                           { id: 'premium', name: 'Premium', desc: 'En tête de liste (7 jours)', cost: 3, color: 'border-primary/50 bg-primary/5 hover:border-primary' },
                         ].map((v) => (
-                          <label key={v.id} className={`cursor-pointer border-2 rounded-xl p-4 flex flex-col justify-between transition-all ${visibilite === v.id ? 'ring-2 ring-primary ring-offset-2 scale-[1.02] ' + v.color : v.color}`}>
-                            <div className="flex items-start gap-4">
-                              <input type="radio" value={v.id} checked={visibilite === v.id} onChange={() => setVisibilite(v.id as any)} className="mt-1" />
-                              <div className="flex-1">
-                                <h4 className="font-bold text-gray-900 leading-tight">{v.name}</h4>
-                                <p className="text-[10px] text-gray-500 mt-1">{v.desc}</p>
+                          <label key={v.id} className={`cursor-pointer border-2 rounded-xl p-2 md:p-4 flex flex-col justify-between transition-all ${visibilite === v.id ? 'ring-2 ring-primary ring-offset-2 scale-[1.02] ' + v.color : v.color}`}>
+                            <div className="flex flex-col md:flex-row items-center md:items-start gap-1 md:gap-4 text-center md:text-left">
+                              <input type="radio" value={v.id} checked={visibilite === v.id} onChange={() => setVisibilite(v.id as any)} className="mt-1 md:mt-0" />
+                              <div className="flex-1 w-full">
+                                <h4 className="font-bold text-[10px] md:text-base text-gray-900 leading-tight">{v.name}</h4>
+                                <p className="text-[8px] md:text-[10px] text-gray-500 mt-1 hidden md:block">{v.desc}</p>
                               </div>
                             </div>
-                            <div className="mt-4 pt-4 border-t border-black/5 flex items-end justify-between font-black text-gray-900">
-                              <span className="flex items-center gap-1"><Coins className="h-4 w-4 text-yellow-500" /> {v.cost === 0 ? 'Gratuit' : `${v.cost} ${v.cost > 1 ? 'Crédits' : 'Crédit'}`}</span>
+                            <div className="mt-2 md:mt-4 pt-2 md:pt-4 border-t border-black/5 flex flex-col md:flex-row items-center md:items-end justify-center md:justify-between font-black text-gray-900">
+                              <span className="flex items-center gap-1 text-[9px] md:text-sm text-center">
+                                 <Coins className="h-3 w-3 md:h-4 md:w-4 text-yellow-500" /> 
+                                 {v.cost === 0 ? 'Gratuit' : <>${v.cost} <span className="hidden md:inline">${v.cost > 1 ? 'Crédits' : 'Crédit'}</span></>}
+                              </span>
                             </div>
                           </label>
                         ))}
                       </div>
                     </div>
                   )}
-
                   <div className="space-y-2 md:col-span-2 flex justify-end mt-4">
                      <Button type="submit" disabled={isLoading} className="h-14 px-12 bg-blue-700 hover:bg-blue-800 rounded-2xl font-black uppercase shadow-lg shadow-blue-700/20 transition-transform active:scale-95">
                         {isLoading ? 'Envoi en cours...' : <><Send className="mr-2 h-5 w-5" /> Publier l'annonce</>}
@@ -597,11 +599,12 @@ export function RecruiterDashboard() {
       </AnimatePresence>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-1 md:grid-cols-4 h-auto md:h-16 gap-2 rounded-2xl bg-white shadow-sm p-1 border border-gray-100 mb-8">
-          <TabsTrigger value="offres" className="rounded-xl font-black uppercase text-xs tracking-widest h-12 md:h-auto"><ListIcon className="mr-2 h-4 w-4" /> Mes Annonces</TabsTrigger>
-          <TabsTrigger value="candidates" className="rounded-xl font-black uppercase text-xs tracking-widest h-12 md:h-auto"><Users className="mr-2 h-4 w-4" /> Candidatures reçues</TabsTrigger>
-          <TabsTrigger value="profile" className="rounded-xl font-black uppercase text-xs tracking-widest h-12 md:h-auto"><User className="mr-2 h-4 w-4" /> Mon Profil</TabsTrigger>
-          <TabsTrigger value="credits" className="rounded-xl font-black uppercase text-xs tracking-widest h-12 md:h-auto text-yellow-700 data-[state=active]:bg-yellow-100 data-[state=active]:text-yellow-900"><Wallet className="mr-2 h-4 w-4" /> Acheter Crédits</TabsTrigger>
+        <TabsList className="flex flex-wrap md:grid w-full md:grid-cols-5 h-auto md:h-16 gap-2 rounded-2xl bg-white shadow-sm p-1 border border-gray-100 mb-8">
+          <TabsTrigger value="offres" className="flex-1 min-w-[140px] rounded-xl font-black uppercase text-[10px] sm:text-xs tracking-widest h-12 md:h-auto"><ListIcon className="mr-1.5 h-3.5 w-3.5" /> Mes Annonces</TabsTrigger>
+          <TabsTrigger value="candidates" className="flex-1 min-w-[140px] rounded-xl font-black uppercase text-[10px] sm:text-xs tracking-widest h-12 md:h-auto"><Users className="mr-1.5 h-3.5 w-3.5" /> Reçues</TabsTrigger>
+          <button onClick={() => navigate('/cvtheque')} className="flex-1 min-w-[140px] inline-flex items-center justify-center whitespace-nowrap rounded-xl font-black uppercase text-[10px] sm:text-xs tracking-widest h-12 md:h-auto text-purple-700 bg-purple-50 hover:bg-purple-100 transition-colors border-none"><Send className="mr-1.5 h-3.5 w-3.5" /> Spontanées</button>
+          <TabsTrigger value="profile" className="flex-1 min-w-[140px] rounded-xl font-black uppercase text-[10px] sm:text-xs tracking-widest h-12 md:h-auto"><User className="mr-1.5 h-3.5 w-3.5" /> Profil</TabsTrigger>
+          <TabsTrigger value="credits" className="flex-1 min-w-[140px] rounded-xl font-black uppercase text-[10px] sm:text-xs tracking-widest h-12 md:h-auto text-yellow-700 data-[state=active]:bg-yellow-100 data-[state=active]:text-yellow-900"><Wallet className="mr-1.5 h-3.5 w-3.5" /> Crédits</TabsTrigger>
         </TabsList>
 
         <TabsContent value="credits">
@@ -614,25 +617,36 @@ export function RecruiterDashboard() {
                <p className="text-gray-500 font-bold mt-2">Utilisez ces crédits pour poster vos offres, ou les rendre urgentes et premium !</p>
                <div className="text-xl font-black text-yellow-600 mt-4 bg-yellow-200/40 inline-flex px-6 py-2 rounded-full">Solde Actuel : {user?.credits || 0} Crédits</div>
             </div>
-            <div className="grid md:grid-cols-3 gap-6">
-               {packages.map((pkg) => (
-                  <div key={pkg.id} className="bg-white border text-center border-gray-100 rounded-[2rem] p-8 shadow-sm hover:shadow-xl transition-all hover:-translate-y-2 relative overflow-hidden group">
-                     <h3 className="text-xl font-black uppercase text-gray-900 mb-2">{pkg.nom}</h3>
-                     {pkg.description && <p className="text-xs font-bold text-gray-400 mb-6">{pkg.description}</p>}
-                     <div className="text-4xl font-black text-blue-700 mb-2">{pkg.prix === 0 ? "Gratuit" : `${pkg.prix} FCFA`}</div>
-                     <div className="bg-yellow-100/50 text-yellow-800 text-sm font-black uppercase tracking-widest py-2 rounded-xl mb-6">
-                        +{pkg.credits} Crédits
+            <div className="grid grid-cols-3 gap-2 md:gap-6">
+               {packages.map((pkg, index) => {
+                  const colorClasses = index % 3 === 0 
+                     ? 'from-blue-600 to-cyan-700 shadow-blue-900/20' 
+                     : index % 3 === 1 
+                        ? 'from-[#006837] to-emerald-700 shadow-emerald-900/20'
+                        : 'from-purple-600 to-fuchsia-700 shadow-purple-900/20';
+                        
+                  return (
+                  <div key={pkg.id} className={`rounded-2xl md:rounded-[2rem] p-2 md:p-8 text-white bg-gradient-to-br ${colorClasses} shadow-lg flex flex-col items-center md:items-stretch justify-between gap-2 md:gap-4 transition-all hover:-translate-y-1 group`}>
+                     <div className="flex flex-col text-center flex-1 w-full">
+                        <h3 className="text-[11px] md:text-xl font-black uppercase mb-1 md:mb-2 leading-tight line-clamp-1">{pkg.nom}</h3>
+                        {pkg.description && <p className="text-[8px] md:text-xs font-medium text-white/80 mb-0 md:mb-6 line-clamp-2 md:line-clamp-none">{pkg.description}</p>}
                      </div>
-                     
-                     <Button 
-                        onClick={() => handleBuyCredits(pkg.id)}
-                        disabled={isLoading}
-                        className="w-full h-14 rounded-2xl bg-gray-900 hover:bg-black font-black uppercase tracking-widest shadow-xl group-hover:scale-105 transition-transform"
-                     >
-                        {isLoading ? 'En cours...' : 'Acheter'}
-                     </Button>
+                     <div className="flex flex-col items-center shrink-0 md:border-t border-white/20 md:pt-6 w-full">
+                        <div className="text-base md:text-4xl font-black mb-1 md:mb-2 leading-tight">{pkg.prix === 0 ? "Gratuit" : <>{pkg.prix} <span className="text-[8px] md:text-lg">FCFA</span></>}</div>
+                        <div className="bg-white/20 text-white text-[7px] md:text-sm font-black uppercase tracking-widest px-1 py-0.5 md:px-2 md:py-2 rounded md:rounded-lg mb-2 md:mb-6 whitespace-nowrap">
+                           +{pkg.credits} <span className="hidden sm:inline">Crédits</span><span className="sm:hidden">Cr</span>
+                        </div>
+                                          
+                        <Button 
+                           onClick={() => handleBuyCredits(pkg.id)}
+                           disabled={isLoading}
+                           className="h-7 md:h-14 px-2 md:px-0 w-full rounded-md md:rounded-2xl bg-white text-gray-900 hover:bg-gray-100 font-black text-[9px] md:text-xs uppercase tracking-widest shadow-xl transition-transform"
+                        >
+                           {isLoading ? '...' : 'Acheter'}
+                        </Button>
+                     </div>
                   </div>
-               ))}
+               )})}
                {packages.length === 0 && <div className="col-span-3 text-center text-gray-500 font-bold p-10">Aucun pack disponible pour le moment.</div>}
             </div>
           </Card>

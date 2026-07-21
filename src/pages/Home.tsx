@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { Button } from '@/components/ui/button';
-import { Search, MapPin, Briefcase, GraduationCap, Trophy, UploadCloud, BellRing, BookOpen, ExternalLink, Sparkles, User } from 'lucide-react';
+import { Search, Send, MapPin, Briefcase, GraduationCap, Trophy, UploadCloud, BellRing, BookOpen, ExternalLink, Sparkles, User } from 'lucide-react';
 import { PromoBanner } from '@/components/common/PromoBanner';
 import { AdBanner } from '@/components/ads/AdBanner';
 import { PremiumCvSlider } from '@/components/common/PremiumCvSlider';
 import { DestinationSections } from '@/components/common/DestinationSections';
+import { SpontaneousApplicationWidget } from '@/components/common/SpontaneousApplicationWidget';
 import { cachedFetch } from '@/lib/fetchCache';
 
 export function Home() {
@@ -133,13 +134,13 @@ export function Home() {
       <div className="container mx-auto px-4 -mt-6 md:-mt-8 relative z-20 max-w-6xl">
 
         {/* Categories row */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-16">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-16">
            <Link to="/offre-demploi" className="relative overflow-hidden bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-xl shadow-indigo-100/30 hover:shadow-2xl hover:shadow-indigo-200/50 border border-slate-100 hover:border-indigo-200 transition-all duration-300 group flex flex-col items-center text-center">
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="relative h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20 rounded-xl md:rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-3 md:mb-6 group-hover:scale-110 group-hover:rotate-3 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm">
                 <Briefcase className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10" />
               </div>
-              <h3 className="relative font-black text-sm sm:text-lg md:text-2xl text-slate-900 group-hover:text-indigo-700 transition-colors">Emplois</h3>
+              <h3 className="relative font-black text-sm sm:text-lg md:text-xl xl:text-2xl text-slate-900 group-hover:text-indigo-700 transition-colors">Emplois</h3>
               <p className="relative text-[10px] sm:text-xs md:text-sm font-medium text-slate-500 mt-1 sm:mt-2">Secteur privé & public</p>
            </Link>
            <Link to="/bourses" className="relative overflow-hidden bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-xl shadow-emerald-100/30 hover:shadow-2xl hover:shadow-emerald-200/50 border border-slate-100 hover:border-emerald-200 transition-all duration-300 group flex flex-col items-center text-center">
@@ -147,7 +148,7 @@ export function Home() {
               <div className="relative h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20 rounded-xl md:rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3 md:mb-6 group-hover:scale-110 group-hover:-rotate-3 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 shadow-sm">
                 <GraduationCap className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10" />
               </div>
-              <h3 className="relative font-black text-sm sm:text-lg md:text-2xl text-slate-900 group-hover:text-emerald-700 transition-colors">Bourses</h3>
+              <h3 className="relative font-black text-sm sm:text-lg md:text-xl xl:text-2xl text-slate-900 group-hover:text-emerald-700 transition-colors">Bourses</h3>
               <p className="relative text-[10px] sm:text-xs md:text-sm font-medium text-slate-500 mt-1 sm:mt-2">Études supérieures</p>
            </Link>
            <Link to="/formations" className="relative overflow-hidden bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-xl shadow-amber-100/30 hover:shadow-2xl hover:shadow-amber-200/50 border border-slate-100 hover:border-amber-200 transition-all duration-300 group flex flex-col items-center text-center">
@@ -155,7 +156,7 @@ export function Home() {
               <div className="relative h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20 rounded-xl md:rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center mb-3 md:mb-6 group-hover:scale-110 group-hover:rotate-3 group-hover:bg-amber-500 group-hover:text-white transition-all duration-300 shadow-sm">
                 <BookOpen className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10" />
               </div>
-              <h3 className="relative font-black text-sm sm:text-lg md:text-2xl text-slate-900 group-hover:text-amber-600 transition-colors">Se former</h3>
+              <h3 className="relative font-black text-sm sm:text-lg md:text-xl xl:text-2xl text-slate-900 group-hover:text-amber-600 transition-colors">Se former</h3>
               <p className="relative text-[10px] sm:text-xs md:text-sm font-medium text-slate-500 mt-1 sm:mt-2">Formations & Coaching</p>
            </Link>
            <Link to="/concours" className="relative overflow-hidden bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-xl shadow-rose-100/30 hover:shadow-2xl hover:shadow-rose-200/50 border border-slate-100 hover:border-rose-200 transition-all duration-300 group flex flex-col items-center text-center">
@@ -163,9 +164,10 @@ export function Home() {
               <div className="relative h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20 rounded-xl md:rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center mb-3 md:mb-6 group-hover:scale-110 group-hover:-rotate-3 group-hover:bg-rose-500 group-hover:text-white transition-all duration-300 shadow-sm">
                 <Trophy className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10" />
               </div>
-              <h3 className="relative font-black text-sm sm:text-lg md:text-2xl text-slate-900 group-hover:text-rose-700 transition-colors">Concours</h3>
+              <h3 className="relative font-black text-sm sm:text-lg md:text-xl xl:text-2xl text-slate-900 group-hover:text-rose-700 transition-colors">Concours</h3>
               <p className="relative text-[10px] sm:text-xs md:text-sm font-medium text-slate-500 mt-1 sm:mt-2">Fonction publique</p>
            </Link>
+           
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-16">
@@ -177,11 +179,7 @@ export function Home() {
               <div className="flex-1 flex flex-col w-full text-left md:text-center">
                 <h3 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900 mb-1 md:mb-3">Promouvoir mon CV</h3>
                 <p className="text-slate-500 text-xs md:text-base mb-2 md:mb-8 flex-1 font-medium leading-tight md:leading-normal">Augmentez votre visibilité auprès des milliers de recruteurs de notre réseau. Soyez chassé directement.</p>
-                <Link to="/candidat?action=importer_cv" className="w-full sm:w-auto md:w-full mt-1 md:mt-0">
-                  <Button variant="outline" className="w-full border-2 border-amber-200 text-amber-900 hover:border-amber-400 hover:bg-amber-500 hover:text-white transition-all duration-300 font-black h-10 md:h-14 rounded-lg md:rounded-xl text-xs sm:text-sm md:text-base bg-white">
-                    Importer
-                  </Button>
-                </Link>
+                <Button nativeButton={false} render={<Link to="/candidat?action=importer_cv" className="w-full sm:w-auto md:w-full mt-1 md:mt-0" />} variant="outline" className="w-full border-2 border-amber-200 text-amber-900 hover:border-amber-400 hover:bg-amber-500 hover:text-white transition-all duration-300 font-black h-10 md:h-14 rounded-lg md:rounded-xl text-xs sm:text-sm md:text-base bg-white">Importer</Button>
               </div>
            </div>
 
@@ -277,14 +275,13 @@ export function Home() {
               <div className="relative z-10 flex-1 flex flex-col w-full text-left md:text-center">
                 <h3 className="text-lg sm:text-xl md:text-2xl font-black text-white mb-1 md:mb-3">Vous recrutez ?</h3>
                 <p className="hidden md:block text-slate-400 text-sm md:text-base mb-8 flex-1 font-medium">Diffusez vos offres rapidement, trouvez les meilleurs talents et accédez à notre CVthèque premium.</p>
-                <Link to="/recruteur" className="w-full sm:w-auto md:w-full mt-1 md:mt-0">
-                  <Button className="w-full bg-[#006837] hover:bg-[#004d29] text-white font-black h-10 md:h-14 rounded-lg md:rounded-xl transition-colors text-xs sm:text-sm md:text-base">
-                    Publier une offre
-                  </Button>
-                </Link>
+                <Button nativeButton={false} render={<Link to="/recruteur" className="w-full sm:w-auto md:w-full mt-1 md:mt-0" />} className="w-full bg-[#006837] hover:bg-[#004d29] text-white font-black h-10 md:h-14 rounded-lg md:rounded-xl transition-colors text-xs sm:text-sm md:text-base">Publier une offre</Button>
               </div>
            </div>
         </div>
+
+        {/* Spontaneous Application Inline Widget */}
+        <SpontaneousApplicationWidget />
 
         {/* Premium CV Slider */}
         {isHomeCvSliderEnabled && <PremiumCvSlider />}

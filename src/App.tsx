@@ -1,4 +1,4 @@
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Home } from '@/pages/Home';
@@ -40,6 +40,8 @@ import { AdminCandidats } from '@/pages/AdminCandidats';
 import { DestinationArticleDetail } from '@/pages/DestinationArticleDetail';
 
 export default function App() {
+  const location = useLocation();
+  
   return (
     <HelmetProvider>
       <Helmet>

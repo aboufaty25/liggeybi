@@ -96,7 +96,7 @@ export function CVtheque() {
           <p className="text-slate-500 font-medium">Les CVs importés par les candidats apparaîtront ici.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-8">
           {profiles.map((profile) => {
             const isPremium = profile.isPremium && new Date(profile.premiumUntil) > new Date();
             return (
@@ -104,7 +104,7 @@ export function CVtheque() {
               <CardContent className="p-0 relative">
                 {isPremium && (
                   <div className="absolute -top-1 -right-1 z-20">
-                     <div className="bg-gradient-to-br from-amber-400 to-amber-600 text-white text-[10px] uppercase font-black tracking-widest py-1.5 px-4 rounded-bl-2xl rounded-tr-[2rem] shadow-lg flex items-center gap-1.5">
+                     <div className="bg-gradient-to-br from-amber-400 to-amber-600 text-white text-[8px] md:text-[10px] uppercase font-black tracking-widest py-1 md:py-1.5 px-2 md:px-4 rounded-bl-xl md:rounded-bl-2xl rounded-tr-xl md:rounded-tr-[2rem] shadow-lg flex items-center gap-1 md:gap-1.5">
                        <Star className="h-3 w-3 fill-white/80" /> Top CV
                      </div>
                   </div>
@@ -126,7 +126,7 @@ export function CVtheque() {
                     <div className={`absolute inset-0 opacity-20 pointer-events-none ${isPremium ? 'bg-gradient-to-b from-amber-400 to-transparent' : 'bg-gradient-to-b from-[#006837] to-transparent'}`} />
                     
                     <div className="absolute inset-0 flex flex-col items-center justify-center pt-4 z-10 pointer-events-none">
-                       <div className={`h-20 w-20 bg-white rounded-full p-1.5 shadow-xl border-4 ${isPremium ? 'border-amber-100' : 'border-white'}`}>
+                       <div className={`h-14 w-14 md:h-20 md:w-20 bg-white rounded-full p-1 md:p-1.5 shadow-xl border-2 md:border-4 ${isPremium ? 'border-amber-100' : 'border-white'}`}>
                           <div className="h-full w-full bg-gray-50 rounded-full flex items-center justify-center overflow-hidden">
                               {profile.photoUrl ? (
                                 <img src={profile.photoUrl} alt="Photo" className="h-full w-full object-cover" />
@@ -138,21 +138,21 @@ export function CVtheque() {
                     </div>
                 </div>
                 
-                <div className="pt-6 pb-8 px-6 text-center relative z-10 bg-white rounded-t-3xl -mt-6">
-                  <h3 className="text-xl font-black text-gray-900 leading-tight mb-1 truncate px-2">
+                <div className="pt-4 md:pt-6 pb-4 md:pb-8 px-3 md:px-6 text-center relative z-10 bg-white rounded-t-[1.5rem] md:rounded-t-3xl -mt-4 md:-mt-6">
+                  <h3 className="text-sm md:text-xl font-black text-gray-900 leading-tight mb-1 truncate px-1 md:px-2">
                     {profile.prenom || profile.nom ? `${profile.prenom || ''} ${profile.nom || ''}`.trim() : "Candidat Anonyme"}
                   </h3>
                   
                   {profile.titre ? (
-                     <div className="flex items-center justify-center gap-1.5 text-[#006837] mb-4 bg-[#006837]/5 py-1.5 px-3 rounded-full inline-flex mx-auto max-w-full">
+                     <div className="flex items-center justify-center gap-1 text-[#006837] mb-2 md:mb-4 bg-[#006837]/5 py-1 md:py-1.5 px-2 md:px-3 rounded-full inline-flex mx-auto max-w-full">
                          <Briefcase className="h-3.5 w-3.5 shrink-0" />
-                         <span className="text-xs font-black uppercase tracking-wider truncate">{profile.titre}</span>
+                         <span className="text-[9px] md:text-xs font-black uppercase tracking-wider truncate">{profile.titre}</span>
                      </div>
                   ) : (
                      <div className="h-8 mb-4"></div>
                   )}
 
-                  <div className="flex flex-col gap-2 text-[11px] text-gray-500 font-bold mb-6">
+                  <div className="flex flex-col gap-1.5 md:gap-2 text-[9px] md:text-[11px] text-gray-500 font-bold mb-4 md:mb-6">
                     {(profile.ville || profile.pays) ? (
                       <div className="flex items-center justify-center gap-1.5 bg-gray-50 py-1.5 rounded-xl">
                         <MapPin className="h-3.5 w-3.5 opacity-70 text-gray-400" />
@@ -169,7 +169,7 @@ export function CVtheque() {
                   <div className="flex gap-3">
                     <Button 
                       variant="outline"
-                      className="flex-1 bg-white border-2 border-gray-100 text-gray-700 hover:border-gray-900 hover:bg-gray-900 hover:text-white font-black uppercase text-[10px] tracking-widest transition-all rounded-xl h-11"
+                      className="flex-1 bg-white border-2 border-gray-100 text-gray-700 hover:border-gray-900 hover:bg-gray-900 hover:text-white font-black uppercase text-[9px] md:text-[10px] tracking-widest transition-all rounded-lg md:rounded-xl h-8 md:h-11 px-2 md:px-4"
                       onClick={() => setSelectedCv(profile.cvUrl)}
                     >
                       <Eye className="h-4 w-4 mr-2" />
@@ -180,7 +180,7 @@ export function CVtheque() {
                       download
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-11 h-11 flex items-center justify-center bg-white border-2 border-gray-100 text-gray-600 hover:border-blue-600 hover:bg-blue-600 hover:text-white font-bold transition-all rounded-xl p-0 shrink-0"
+                      className="w-8 h-8 md:w-11 md:h-11 flex items-center justify-center bg-white border-2 border-gray-100 text-gray-600 hover:border-blue-600 hover:bg-blue-600 hover:text-white font-bold transition-all rounded-lg md:rounded-xl p-0 shrink-0"
                       title="Télécharger le PDF"
                     >
                       <Download className="h-4 w-4" />

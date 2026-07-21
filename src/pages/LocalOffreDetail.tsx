@@ -420,11 +420,7 @@ https://www.liggeybi.com`
                    )}
                    {job.modeCandidature === 'lien' && job.lienExterne && (
                      <div className="text-center">
-                       <a href={job.lienExterne} target="_blank" rel="noopener noreferrer" className="block">
-                         <Button className="w-full sm:w-auto bg-[#006837] hover:bg-[#004d29] text-white font-black text-lg h-16 px-12 rounded-2xl shadow-xl transition-all hover:-translate-y-1 uppercase tracking-tighter">
-                           POSTULER SUR LE SITE <ExternalLink className="ml-3 h-5 w-5" />
-                         </Button>
-                       </a>
+                       <Button nativeButton={false} render={<a href={job.lienExterne} target="_blank" rel="noopener noreferrer" className="block" />} className="w-full sm:w-auto bg-[#006837] hover:bg-[#004d29] text-white font-black text-lg h-16 px-12 rounded-2xl shadow-xl transition-all hover:-translate-y-1 uppercase tracking-tighter">POSTULER SUR LE SITE <ExternalLink className="ml-3 h-5 w-5" /></Button>
                      </div>
                    )}
                    {job.modeCandidature === 'interne' && (
@@ -548,12 +544,7 @@ https://www.liggeybi.com`
                         </div>
                       </div>
 
-                      <Link to={`/recherche?q=${job.entreprise || ''}`}>
-                        <Button className="w-full bg-white hover:bg-slate-50 text-slate-900 border-2 border-slate-200 font-black text-xs h-14 rounded-2xl shadow-sm transition-all hover:border-slate-900 hover:text-slate-900 uppercase tracking-tighter group/btn">
-                           VOIR TOUTES SES OFFRES 
-                           <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                        </Button>
-                      </Link>
+                      <Button nativeButton={false} render={<Link to={`/recherche?q=${job.entreprise || ''}`} />} className="w-full bg-white hover:bg-slate-50 text-slate-900 border-2 border-slate-200 font-black text-xs h-14 rounded-2xl shadow-sm transition-all hover:border-slate-900 hover:text-slate-900 uppercase tracking-tighter group/btn">VOIR TOUTES SES OFFRES <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-1" /></Button>
                     </div>
                   </div>
                </div>

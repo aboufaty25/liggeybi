@@ -107,11 +107,7 @@ export function PremiumCvSlider() {
             opportunité pour capter toute l'attention des recruteurs.
           </p>
           {!isRecruiter && (
-            <Link to="/candidat">
-              <Button className="bg-amber-500 hover:bg-amber-600 text-white font-bold h-12 px-8 rounded-xl">
-                Promouvoir mon CV maintenant
-              </Button>
-            </Link>
+            <Button nativeButton={false} render={<Link to="/candidat" />} className="bg-amber-500 hover:bg-amber-600 text-white font-bold h-12 px-8 rounded-xl">Promouvoir mon CV maintenant</Button>
           )}
         </div>
       ) : (
@@ -136,7 +132,7 @@ export function PremiumCvSlider() {
                   damping: 20,
                 }}
                 whileHover={{ y: -8, scale: 1.02 }}
-                className="flex-none w-[280px] md:w-[320px] snap-start bg-white rounded-2xl md:rounded-[2rem] border border-amber-200 shadow-xl shadow-amber-900/10 p-6 flex flex-col relative overflow-hidden group cursor-pointer"
+                className="flex-none w-[220px] md:w-[320px] snap-start bg-white rounded-xl md:rounded-[2rem] border border-amber-200 shadow-xl shadow-amber-900/10 p-4 md:p-6 flex flex-col relative overflow-hidden group cursor-pointer"
               >
                 {/* Background decoration */}
                 <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-amber-100 to-orange-100 rounded-bl-full -z-0 transition-transform duration-500 group-hover:scale-125 opacity-50"></div>
@@ -147,7 +143,7 @@ export function PremiumCvSlider() {
                     <motion.div
                       whileHover={{ rotate: [0, -10, 10, -10, 0] }}
                       transition={{ duration: 0.5 }}
-                      className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 via-orange-400 to-orange-500 text-white flex items-center justify-center text-3xl font-black shadow-lg shadow-orange-500/40 border-4 border-white transform -rotate-3 group-hover:rotate-0 transition-all duration-300"
+                      className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-gradient-to-br from-amber-400 via-orange-400 to-orange-500 text-white flex items-center justify-center text-2xl md:text-3xl font-black shadow-lg shadow-orange-500/40 border-[3px] md:border-4 border-white transform -rotate-3 group-hover:rotate-0 transition-all duration-300"
                     >
                       {cv.prenom?.[0] || cv.user?.name?.[0] || "C"}
                     </motion.div>
@@ -156,7 +152,7 @@ export function PremiumCvSlider() {
                     </div>
                   </div>
 
-                  <h3 className="font-black text-gray-900 text-xl line-clamp-1 mb-1 group-hover:text-amber-700 transition-colors">
+                  <h3 className="font-black text-gray-900 text-base md:text-xl line-clamp-1 mb-1 group-hover:text-amber-700 transition-colors">
                     {cv.prenom || cv.user?.name || "Anonyme"} {cv.nom || ""}
                   </h3>
                   <p className="text-sm font-bold text-amber-600 mb-4 line-clamp-1">

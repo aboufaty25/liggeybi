@@ -49,7 +49,7 @@ export function JobCard({ post, variant = 'small', isPremiumGrid = false }: JobC
       className="w-full"
     >
       <Link to={linkUrl} state={{ post }} className="block w-full">
-        <Card className={`relative overflow-hidden p-3 md:p-4 w-full flex flex-row items-center gap-4 md:gap-6 transition-all duration-300 rounded-2xl ${isGlowingRed ? 'border-2 border-rose-500 bg-rose-50/10' : 'border border-slate-200 bg-white hover:border-slate-800 shadow-none hover:shadow-lg hover:shadow-slate-200'}`}>
+        <Card className={`relative overflow-hidden p-2.5 md:p-4 w-full flex flex-row items-center gap-3 md:gap-6 transition-all duration-300 rounded-2xl ${isGlowingRed ? 'border-2 border-rose-500 bg-rose-50/10' : 'border border-slate-200 bg-white hover:border-slate-800 shadow-none hover:shadow-lg hover:shadow-slate-200'}`}>
           {showPremium ? (
              <div className="absolute top-0 right-0 z-20">
                <div className="bg-slate-900 text-amber-400 text-[9px] uppercase font-black px-3 py-1 rounded-bl-xl flex items-center">
@@ -65,7 +65,7 @@ export function JobCard({ post, variant = 'small', isPremiumGrid = false }: JobC
           ) : null}
 
           {imageUrl ? (
-            <div className="relative h-16 w-16 md:h-20 md:w-20 shrink-0 bg-slate-50 border border-slate-100 p-1 rounded-xl flex items-center justify-center overflow-hidden">
+            <div className="relative h-12 w-12 md:h-20 md:w-20 shrink-0 bg-slate-50 border border-slate-100 p-1 rounded-xl flex items-center justify-center overflow-hidden">
               <img
                 src={imageUrl}
                 alt={title}
@@ -74,7 +74,7 @@ export function JobCard({ post, variant = 'small', isPremiumGrid = false }: JobC
               />
             </div>
           ) : (
-            <div className="relative h-16 w-16 md:h-20 md:w-20 shrink-0 bg-slate-100 rounded-xl flex items-center justify-center overflow-hidden border border-slate-200 text-slate-400">
+            <div className="relative h-12 w-12 md:h-20 md:w-20 shrink-0 bg-slate-100 rounded-xl flex items-center justify-center overflow-hidden border border-slate-200 text-slate-400">
                <Building2 className="h-8 w-8 opacity-50" />
             </div>
           )}
@@ -94,11 +94,11 @@ export function JobCard({ post, variant = 'small', isPremiumGrid = false }: JobC
             </div>
             
             <h3 
-              className="font-black text-slate-900 leading-snug mb-1 md:mb-1.5 text-[13px] md:text-base line-clamp-2 truncate whitespace-normal"
+              className="font-black text-slate-900 leading-snug mb-0.5 md:mb-1.5 text-xs md:text-base line-clamp-2 truncate whitespace-normal"
               dangerouslySetInnerHTML={{ __html: title || '' }}
             />
 
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 mt-1 text-[11px] font-bold text-slate-500">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-[10px] md:text-[11px] font-bold text-slate-500">
               {acf?.nomEntreprise && (
                 <div className="flex items-center text-slate-700">
                   <Building2 className="h-3.5 w-3.5 mr-1.5 text-slate-400" />
