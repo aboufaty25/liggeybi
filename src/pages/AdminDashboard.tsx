@@ -1498,7 +1498,7 @@ export function AdminDashboard() {
 
            <TabsContent value="packages">
              <div className="bg-gray-50 border border-gray-100 p-6 sm:p-8 rounded-[2rem] shadow-sm">
-                <JobPackagesManager />
+                {/* <JobPackagesManager /> */}
                 <div className="my-12 border-t border-gray-200"></div>
                 <CvPackagesManager />
              </div>

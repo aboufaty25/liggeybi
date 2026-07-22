@@ -99,7 +99,7 @@ export default function App() {
             <Route path="/destination-article/:idOrSlug" element={<DestinationArticleDetail />} />
           </Routes>
         </main>
-        <Footer />
+        {!location.pathname.startsWith('/recruteur') && <Footer />}
       </div>
       </AuthProvider>
     </HelmetProvider>

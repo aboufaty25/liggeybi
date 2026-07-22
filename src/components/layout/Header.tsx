@@ -93,7 +93,7 @@ export function Header() {
     { name: 'Concours', href: '/concours', icon: Trophy, color: 'text-rose-600' },
     { name: 'Formation', href: '/formations', icon: BookOpen, color: 'text-slate-900' },
     { name: 'Boutique', href: '/boutique', icon: ShoppingBag, color: 'text-rose-600' },
-    { name: 'Candidature', href: '/candidature-spontanee', icon: Briefcase, color: 'text-indigo-600', mobileOnly: true },
+    { name: 'Spontanée', href: '/candidature-spontanee', icon: Briefcase, color: 'text-indigo-600', mobileOnly: true },
   ];
 
   return (
@@ -352,7 +352,7 @@ export function Header() {
                 : link.name === 'Bourses' ? 'bg-amber-100 text-amber-600'
                 : link.name === 'Concours' ? 'bg-purple-100 text-purple-600'
                 : link.name === 'Formation' ? 'bg-emerald-100 text-emerald-600'
-                : link.name === 'Candidature' ? 'bg-indigo-100 text-indigo-600'
+                : link.name === 'Spontanée' ? 'bg-indigo-100 text-indigo-600'
                 : 'bg-slate-100 text-slate-600'
              }`}>
                <link.icon className="w-5 h-5" />
@@ -466,7 +466,7 @@ export function Header() {
             <Link to="/formations" className="snap-start shrink-0 hover:text-blue-700 hover:bg-blue-50 bg-gray-50 px-5 py-2 rounded-xl border border-transparent shadow-sm transition-all duration-300">Formation</Link>
             <Link to="/bourses" className="snap-start shrink-0 hover:text-blue-700 hover:bg-blue-50 bg-gray-50 px-5 py-2 rounded-xl border border-transparent shadow-sm transition-all duration-300">Bourses</Link>
             <Link to="/concours" className="snap-start shrink-0 hover:text-blue-700 hover:bg-blue-50 bg-gray-50 px-5 py-2 rounded-xl border border-transparent shadow-sm transition-all duration-300">Concours</Link>
-            <Link to="/candidature-spontanee" className="snap-start shrink-0 hover:text-purple-700 hover:bg-purple-50 bg-purple-50/50 text-purple-700 px-5 py-2 rounded-xl border border-transparent shadow-sm transition-all duration-300">Candidature Spontanée</Link>
+            <Link to="/candidature-spontanee" className="snap-start shrink-0 hover:text-purple-700 hover:bg-purple-50 bg-purple-50/50 text-purple-700 px-5 py-2 rounded-xl border border-transparent shadow-sm transition-all duration-300">Spontanée</Link>
           </div>
         </div>
       )}

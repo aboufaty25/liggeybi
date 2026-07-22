@@ -1,10 +1,5 @@
 const fs = require('fs');
 let content = fs.readFileSync('src/App.tsx', 'utf8');
 
-content = content.replace("{!isAppLayout && <Header />}", "<Header />");
-content = content.replace("{!isAppLayout && <Footer />}", "<Footer />");
-// We can also remove the isAppLayout stuff
-content = content.replace("const isAppLayout = location.pathname === '/candidat';", "");
-
-fs.writeFileSync('src/App.tsx', content);
-console.log("App.tsx patched");
+// Replace `<Header />` with `{(!location.pathname.startsWith('/recruteur') && !location.pathname.startsWith('/admin')) && <Header />}`
+// Actually wait, does admin have a header? Admin dashboard probably doesn't want the header either, but let's just do it for recruteur for now. Or let's see.

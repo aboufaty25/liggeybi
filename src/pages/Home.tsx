@@ -178,7 +178,7 @@ export function Home() {
               </div>
               <div className="flex-1 flex flex-col w-full text-left md:text-center">
                 <h3 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900 mb-1 md:mb-3">Promouvoir mon CV</h3>
-                <p className="text-slate-500 text-xs md:text-base mb-2 md:mb-8 flex-1 font-medium leading-tight md:leading-normal">Augmentez votre visibilité auprès des milliers de recruteurs de notre réseau. Soyez chassé directement.</p>
+                <p className="text-slate-500 text-xs md:text-base mb-2 md:mb-8 flex-1 font-medium leading-tight md:leading-normal">Augmentez votre visibilité auprès des milliers de recruteurs de notre réseau. Soyez contacté directement.</p>
                 <Button nativeButton={false} render={<Link to="/candidat?action=importer_cv" className="w-full sm:w-auto md:w-full mt-1 md:mt-0" />} variant="outline" className="w-full border-2 border-amber-200 text-amber-900 hover:border-amber-400 hover:bg-amber-500 hover:text-white transition-all duration-300 font-black h-10 md:h-14 rounded-lg md:rounded-xl text-xs sm:text-sm md:text-base bg-white">Importer</Button>
               </div>
            </div>

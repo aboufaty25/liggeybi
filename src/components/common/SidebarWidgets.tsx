@@ -22,7 +22,7 @@ export function SidebarWidgets() {
            <UploadCloud className="h-8 w-8 text-amber-500" />
          </div>
          <h3 className="text-xl font-black text-slate-900 mb-2">Promouvoir mon CV</h3>
-         <p className="text-slate-500 text-sm mb-6 font-medium leading-tight">Augmentez votre visibilité et soyez chassé directement par notre réseau de recruteurs.</p>
+         <p className="text-slate-500 text-sm mb-6 font-medium leading-tight">Augmentez votre visibilité et soyez contacté directement par notre réseau de recruteurs.</p>
          <Button nativeButton={false} render={<Link to="/candidat" className="w-full" />} variant="outline" className="w-full border-2 border-amber-200 text-amber-900 hover:border-amber-400 hover:bg-amber-500 hover:text-white transition-all duration-300 font-black rounded-xl">Importer mon CV</Button>
       </div>
 

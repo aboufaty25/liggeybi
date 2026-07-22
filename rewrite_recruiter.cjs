@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+const fs = require('fs');
+
+const content = `import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -55,7 +57,7 @@ export function RecruiterDashboard() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('offres');
   const [selectedCv, setSelectedCv] = useState<string | null>(null);
-  
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const navigate = useNavigate();
 
@@ -83,7 +85,7 @@ export function RecruiterDashboard() {
     const fetchOffres = async () => {
       try {
         const res = await fetch('/api/my-offres', {
-          headers: { 'Authorization': `Bearer ${token}` }
+          headers: { 'Authorization': \`Bearer \${token}\` }
         });
         if (res.ok) {
           const data = await res.json();
@@ -97,7 +99,7 @@ export function RecruiterDashboard() {
     const fetchCandidatures = async () => {
       try {
         const res = await fetch('/api/recruiter/candidatures', {
-          headers: { 'Authorization': `Bearer ${token}` }
+          headers: { 'Authorization': \`Bearer \${token}\` }
         });
         if (res.ok) {
           const data = await res.json();
@@ -159,7 +161,7 @@ export function RecruiterDashboard() {
       const res = await fetch('/api/profile', {
         method: 'PUT',
         headers: { 
-          'Authorization': `Bearer ${token}`,
+          'Authorization': \`Bearer \${token}\`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(profile)
@@ -188,7 +190,7 @@ export function RecruiterDashboard() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': \`Bearer \${token}\`
           },
           body: JSON.stringify(payload)
         });
@@ -205,11 +207,11 @@ export function RecruiterDashboard() {
            alert(err.error || "Erreur lors de la publication.");
         }
       } else {
-        const res = await fetch(`/api/offres/${editingId}`, {
+        const res = await fetch(\`/api/offres/\${editingId}\`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': \`Bearer \${token}\`
           },
           body: JSON.stringify(payload)
         });
@@ -226,7 +228,7 @@ export function RecruiterDashboard() {
       // Refresh offres
       refreshUser?.();
       const resOffres = await fetch('/api/my-offres', {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { 'Authorization': \`Bearer \${token}\` }
       });
       if (resOffres.ok) {
         const data = await resOffres.json();
@@ -243,44 +245,77 @@ export function RecruiterDashboard() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
-
+      {/* Custom Recruiter Header */}
+      <header className="bg-slate-900 text-white sticky top-0 z-50 shadow-md">
+        <div className="container mx-auto px-4 h-16 sm:h-20 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+             <Link to="/" className="flex items-center gap-2 group">
+               <div className="bg-[#006837] text-white p-1.5 sm:p-2 rounded-lg group-hover:bg-[#004d29] transition-colors">
+                  <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+               </div>
+               <span className="font-black text-lg sm:text-xl tracking-tighter hidden sm:block">Retour au site</span>
+             </Link>
+             <div className="h-6 w-px bg-slate-700 hidden sm:block mx-2"></div>
+             <div className="flex items-center gap-2 text-emerald-400">
+               <LayoutDashboard className="h-5 w-5 sm:h-6 sm:w-6" />
+               <span className="font-black text-lg sm:text-xl tracking-tighter uppercase">Recruteur</span>
+             </div>
+          </div>
+          
+          <div className="flex items-center gap-3 sm:gap-6">
+             <div className="hidden md:flex items-center gap-3">
+               <div className="h-10 w-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center overflow-hidden">
+                 {user?.image ? <img src={user.image} alt={user.name} className="h-full w-full object-cover" /> : <User className="h-5 w-5 text-slate-400" />}
+               </div>
+               <div className="flex flex-col">
+                 <span className="font-bold text-sm leading-tight truncate max-w-[150px]">{user?.name}</span>
+                 <span className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">{profile.entreprise || 'Entreprise'}</span>
+               </div>
+             </div>
+             <Button onClick={logout} variant="ghost" className="text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl px-3 h-10">
+                <LogOut className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline font-bold uppercase text-xs tracking-widest">Déconnexion</span>
+             </Button>
+          </div>
+        </div>
+      </header>
 
       {/* Main Content */}
-      <main className="flex-1 container mx-auto px-4 py-4 md:py-8 max-w-7xl">
+      <main className="flex-1 container mx-auto px-4 py-8 max-w-7xl">
         <div className="flex flex-col lg:flex-row gap-8">
           
           {/* Sidebar Navigation */}
           <aside className="w-full lg:w-64 shrink-0 space-y-2">
             <Button 
                onClick={() => { setShowForm(true); setEditingId(null); setActiveTab('offres'); }} 
-               className="w-full h-10 sm:h-12 bg-[#006837] hover:bg-[#004d29] text-white rounded-lg sm:rounded-xl font-bold text-xs sm:text-sm mb-4 sm:mb-6 shadow-md shadow-emerald-900/10"
+               className="w-full h-14 bg-[#006837] hover:bg-[#004d29] text-white rounded-2xl font-black uppercase tracking-widest mb-6 shadow-lg shadow-emerald-900/20"
             >
-               <Plus className="mr-2 h-4 w-4" /> Publier une offre
+               <Plus className="mr-2 h-5 w-5" /> Publier une offre
             </Button>
             
             <nav className="flex flex-row lg:flex-col gap-2 overflow-x-auto pb-4 lg:pb-0 no-scrollbar">
               <button 
                  onClick={() => { setActiveTab('offres'); setShowForm(false); }}
-                 className={`flex items-center justify-center lg:justify-start gap-3 px-4 h-12 rounded-xl font-bold text-xs sm:text-sm sm:uppercase sm:tracking-widest transition-all min-w-[140px] lg:min-w-0 ${activeTab === 'offres' && !showForm ? 'bg-white text-slate-900 shadow-sm border border-slate-200' : 'text-slate-500 hover:bg-slate-200/50 hover:text-slate-700'}`}
+                 className={\`flex items-center justify-center lg:justify-start gap-3 px-4 h-12 rounded-xl font-bold uppercase text-xs tracking-widest transition-all min-w-[140px] lg:min-w-0 \${activeTab === 'offres' && !showForm ? 'bg-white text-slate-900 shadow-sm border border-slate-200' : 'text-slate-500 hover:bg-slate-200/50 hover:text-slate-700'}\`}
               >
                  <ListIcon className="h-4 w-4" /> Mes Annonces
               </button>
               <button 
                  onClick={() => { setActiveTab('candidates'); setShowForm(false); }}
-                 className={`flex items-center justify-center lg:justify-start gap-3 px-4 h-12 rounded-xl font-bold text-xs sm:text-sm sm:uppercase sm:tracking-widest transition-all min-w-[140px] lg:min-w-0 ${activeTab === 'candidates' && !showForm ? 'bg-white text-slate-900 shadow-sm border border-slate-200' : 'text-slate-500 hover:bg-slate-200/50 hover:text-slate-700'}`}
+                 className={\`flex items-center justify-center lg:justify-start gap-3 px-4 h-12 rounded-xl font-bold uppercase text-xs tracking-widest transition-all min-w-[140px] lg:min-w-0 \${activeTab === 'candidates' && !showForm ? 'bg-white text-slate-900 shadow-sm border border-slate-200' : 'text-slate-500 hover:bg-slate-200/50 hover:text-slate-700'}\`}
               >
                  <Users className="h-4 w-4" /> Candidatures
                  {candidatures.length > 0 && <span className="ml-auto bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md text-[10px]">{candidatures.length}</span>}
               </button>
               <button 
                  onClick={() => window.open('/cvtheque', '_blank')}
-                 className="flex items-center justify-center lg:justify-start gap-3 px-4 h-12 rounded-xl font-bold text-xs sm:text-sm sm:uppercase sm:tracking-widest transition-all min-w-[140px] lg:min-w-0 text-purple-600 bg-purple-50 hover:bg-purple-100 border border-purple-100"
+                 className="flex items-center justify-center lg:justify-start gap-3 px-4 h-12 rounded-xl font-bold uppercase text-xs tracking-widest transition-all min-w-[140px] lg:min-w-0 text-purple-600 bg-purple-50 hover:bg-purple-100 border border-purple-100"
               >
                  <Search className="h-4 w-4" /> CVthèque
               </button>
               <button 
                  onClick={() => { setActiveTab('profile'); setShowForm(false); }}
-                 className={`flex items-center justify-center lg:justify-start gap-3 px-4 h-12 rounded-xl font-bold text-xs sm:text-sm sm:uppercase sm:tracking-widest transition-all min-w-[140px] lg:min-w-0 ${activeTab === 'profile' && !showForm ? 'bg-white text-slate-900 shadow-sm border border-slate-200' : 'text-slate-500 hover:bg-slate-200/50 hover:text-slate-700'}`}
+                 className={\`flex items-center justify-center lg:justify-start gap-3 px-4 h-12 rounded-xl font-bold uppercase text-xs tracking-widest transition-all min-w-[140px] lg:min-w-0 \${activeTab === 'profile' && !showForm ? 'bg-white text-slate-900 shadow-sm border border-slate-200' : 'text-slate-500 hover:bg-slate-200/50 hover:text-slate-700'}\`}
               >
                  <User className="h-4 w-4" /> Mon Profil
               </button>
@@ -343,7 +378,7 @@ export function RecruiterDashboard() {
                   >
                     <div className="bg-slate-900 p-6 flex items-center justify-between text-white">
                       <div>
-                         <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight">{editingId ? 'Modifier l\'Offre' : 'Publier une Nouvelle Offre'}</h2>
+                         <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight">{editingId ? 'Modifier l\\'Offre' : 'Publier une Nouvelle Offre'}</h2>
                          <p className="text-slate-400 text-xs sm:text-sm font-medium mt-1">Diffusez votre offre gratuitement avec l'option de mise en avant.</p>
                       </div>
                       <Button onClick={() => setShowForm(false)} variant="ghost" className="text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl">
@@ -492,7 +527,7 @@ export function RecruiterDashboard() {
                           <div className="space-y-2 md:col-span-2 pt-4 border-t border-slate-200">
                              <h4 className="text-sm font-black uppercase tracking-widest mb-4 text-slate-900">Méthode de Candidature</h4>
                              <div className="grid sm:grid-cols-2 gap-4">
-                                <label className={`border-2 rounded-2xl p-4 cursor-pointer transition-all flex flex-col gap-2 ${formData.modeCandidature === 'interne' ? 'border-[#006837] bg-emerald-50' : 'border-slate-200 hover:border-emerald-200'}`}>
+                                <label className={\`border-2 rounded-2xl p-4 cursor-pointer transition-all flex flex-col gap-2 \${formData.modeCandidature === 'interne' ? 'border-[#006837] bg-emerald-50' : 'border-slate-200 hover:border-emerald-200'}\`}>
                                    <div className="flex items-center gap-2">
                                      <input type="radio" name="modeCandidature" value="interne" checked={formData.modeCandidature === 'interne'} onChange={() => setFormData({...formData, modeCandidature: 'interne'})} className="text-[#006837]" />
                                      <span className="font-bold text-sm">Candidature Interne (Via SunuCV)</span>
@@ -504,7 +539,7 @@ export function RecruiterDashboard() {
                                      </div>
                                    )}
                                 </label>
-                                <label className={`border-2 rounded-2xl p-4 cursor-pointer transition-all flex flex-col gap-2 ${formData.modeCandidature === 'externe' ? 'border-[#006837] bg-emerald-50' : 'border-slate-200 hover:border-emerald-200'}`}>
+                                <label className={\`border-2 rounded-2xl p-4 cursor-pointer transition-all flex flex-col gap-2 \${formData.modeCandidature === 'externe' ? 'border-[#006837] bg-emerald-50' : 'border-slate-200 hover:border-emerald-200'}\`}>
                                    <div className="flex items-center gap-2">
                                      <input type="radio" name="modeCandidature" value="externe" checked={formData.modeCandidature === 'externe'} onChange={() => setFormData({...formData, modeCandidature: 'externe'})} className="text-[#006837]" />
                                      <span className="font-bold text-sm">Candidature Externe (Votre site)</span>
@@ -523,7 +558,7 @@ export function RecruiterDashboard() {
                             <div className="space-y-4 md:col-span-2 pt-4 border-t border-slate-200">
                                <h4 className="text-sm font-black uppercase tracking-widest text-slate-900">Mise en Avant (100% Gratuit)</h4>
                                <div className="grid md:grid-cols-3 gap-4">
-                                  <label className={`border-2 rounded-2xl p-4 cursor-pointer transition-all relative overflow-hidden flex flex-col items-center text-center ${visibilite === 'standard' ? 'border-slate-900 bg-slate-50' : 'border-slate-200 hover:border-slate-300'}`}>
+                                  <label className={\`border-2 rounded-2xl p-4 cursor-pointer transition-all relative overflow-hidden flex flex-col items-center text-center \${visibilite === 'standard' ? 'border-slate-900 bg-slate-50' : 'border-slate-200 hover:border-slate-300'}\`}>
                                      <input type="radio" name="visibilite" className="hidden" checked={visibilite === 'standard'} onChange={() => setVisibilite('standard')} />
                                      <div className="h-10 w-10 rounded-full bg-slate-200 flex items-center justify-center mb-2">
                                         <Briefcase className="h-5 w-5 text-slate-600" />
@@ -531,7 +566,7 @@ export function RecruiterDashboard() {
                                      <span className="font-black text-sm uppercase">Standard</span>
                                      <span className="text-[10px] text-slate-500 font-bold mt-1">Affichage classique</span>
                                   </label>
-                                  <label className={`border-2 rounded-2xl p-4 cursor-pointer transition-all relative overflow-hidden flex flex-col items-center text-center ${visibilite === 'urgent' ? 'border-orange-500 bg-orange-50' : 'border-slate-200 hover:border-orange-200'}`}>
+                                  <label className={\`border-2 rounded-2xl p-4 cursor-pointer transition-all relative overflow-hidden flex flex-col items-center text-center \${visibilite === 'urgent' ? 'border-orange-500 bg-orange-50' : 'border-slate-200 hover:border-orange-200'}\`}>
                                      <input type="radio" name="visibilite" className="hidden" checked={visibilite === 'urgent'} onChange={() => setVisibilite('urgent')} />
                                      <div className="absolute top-0 right-0 bg-orange-500 text-white text-[8px] font-black uppercase px-2 py-1 rounded-bl-lg">Gratuit</div>
                                      <div className="h-10 w-10 rounded-full bg-orange-200 flex items-center justify-center mb-2 text-orange-600">
@@ -540,7 +575,7 @@ export function RecruiterDashboard() {
                                      <span className="font-black text-sm uppercase text-orange-700">Urgent</span>
                                      <span className="text-[10px] text-orange-600/80 font-bold mt-1">Badge Urgent en rouge</span>
                                   </label>
-                                  <label className={`border-2 rounded-2xl p-4 cursor-pointer transition-all relative overflow-hidden flex flex-col items-center text-center ${visibilite === 'premium' ? 'border-purple-500 bg-purple-50' : 'border-slate-200 hover:border-purple-200'}`}>
+                                  <label className={\`border-2 rounded-2xl p-4 cursor-pointer transition-all relative overflow-hidden flex flex-col items-center text-center \${visibilite === 'premium' ? 'border-purple-500 bg-purple-50' : 'border-slate-200 hover:border-purple-200'}\`}>
                                      <input type="radio" name="visibilite" className="hidden" checked={visibilite === 'premium'} onChange={() => setVisibilite('premium')} />
                                      <div className="absolute top-0 right-0 bg-purple-500 text-white text-[8px] font-black uppercase px-2 py-1 rounded-bl-lg">Gratuit</div>
                                      <div className="h-10 w-10 rounded-full bg-purple-200 flex items-center justify-center mb-2 text-purple-600">
@@ -555,7 +590,7 @@ export function RecruiterDashboard() {
 
                           <div className="md:col-span-2 pt-6">
                             <Button disabled={isLoading} className="w-full h-14 rounded-xl bg-[#006837] hover:bg-[#004d29] text-white font-black uppercase tracking-widest text-sm shadow-xl shadow-emerald-900/20">
-                              {isLoading ? 'Publication en cours...' : editingId ? 'Enregistrer les modifications' : 'Publier l\'Offre Maintenant'}
+                              {isLoading ? 'Publication en cours...' : editingId ? 'Enregistrer les modifications' : 'Publier l\\'Offre Maintenant'}
                             </Button>
                           </div>
                        </form>
@@ -597,10 +632,10 @@ export function RecruiterDashboard() {
                                         </div>
                                      </div>
                                      <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto mt-2 sm:mt-0 pt-4 sm:pt-0 border-t sm:border-0 border-slate-100">
-                                        <div className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border ${
+                                        <div className={\`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest border \${
                                           offre.statut === 'approuve' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 
                                           offre.statut === 'en_attente' ? 'bg-orange-50 text-orange-700 border-orange-200' : 'bg-rose-50 text-rose-700 border-rose-200'
-                                        }`}>
+                                        }\`}>
                                           {offre.statut === 'approuve' ? <CheckCircle className="h-3 w-3" /> : <Clock className="h-3 w-3" />}
                                           <span className="hidden sm:inline">{offre.statut.replace('_', ' ')}</span>
                                         </div>
@@ -628,7 +663,7 @@ export function RecruiterDashboard() {
                                              onClick={async () => {
                                                if(!confirm("Voulez-vous vraiment supprimer cette offre ?")) return;
                                                try {
-                                                 const res = await fetch(`/api/offres/${offre.id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` } });
+                                                 const res = await fetch(\`/api/offres/\${offre.id}\`, { method: 'DELETE', headers: { 'Authorization': \`Bearer \${token}\` } });
                                                  if(res.ok) { setOffres(offres.filter(o => o.id !== offre.id)); }
                                                } catch(err) { console.error(err); }
                                              }}
@@ -677,7 +712,7 @@ export function RecruiterDashboard() {
                                               Voir CV
                                            </Button>
                                          )}
-                                         <Button onClick={() => window.location.href = `mailto:${candidate.email}`} size="sm" className="rounded-xl font-bold bg-slate-900 hover:bg-slate-800 text-white h-9 flex-1 sm:flex-none">
+                                         <Button onClick={() => window.location.href = \`mailto:\${candidate.email}\`} size="sm" className="rounded-xl font-bold bg-slate-900 hover:bg-slate-800 text-white h-9 flex-1 sm:flex-none">
                                             Contacter
                                          </Button>
                                       </div>
@@ -764,7 +799,7 @@ export function RecruiterDashboard() {
           <div className="flex-1 bg-slate-100 relative">
             {selectedCv && (
                <iframe 
-                 src={`${selectedCv}#toolbar=0`}
+                 src={\`\${selectedCv}#toolbar=0\`}
                  className="absolute inset-0 w-full h-full border-0 bg-white"
                  title="PDF Preview"
                />
@@ -775,3 +810,7 @@ export function RecruiterDashboard() {
     </div>
   );
 }
+`;
+
+fs.writeFileSync('src/pages/RecruiterDashboard.tsx', content);
+console.log("Rewrite completed");
