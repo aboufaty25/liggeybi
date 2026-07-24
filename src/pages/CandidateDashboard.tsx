@@ -351,7 +351,7 @@ export function CandidateDashboard() {
                            </p>
                         </div>
                         <div className="shrink-0">
-                           <Button onClick={() => setActiveTab("promotion")} className="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-500/20 font-black h-10 px-6 rounded-xl transition-all hover:scale-105 text-xs">
+                           <Button onClick={() => setShowPackModal(true)} className="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-white shadow-lg shadow-amber-500/20 font-black h-10 px-6 rounded-xl transition-all hover:scale-105 text-xs">
                              Devenir Premium <Zap className="ml-2 w-3 h-3" />
                            </Button>
                         </div>
@@ -568,22 +568,29 @@ export function CandidateDashboard() {
                   <p className="text-slate-500 mt-2 font-medium max-w-2xl">Débloquez les fonctionnalités premium et propulsez votre carrière en vous rendant visible auprès de milliers d'entreprises.</p>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 md:gap-6">
-                  {cvPackages.filter(pkg => !(pkg.type === 'DEPOT' && canUpload)).map((pkg, index) => {
-                    const isRecommended = pkg.prix === 900 || index === 1;
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
+                  {cvPackages.filter(pkg => pkg.type === 'DEPOT' || pkg.type === 'VISIBILITE').sort((a, b) => b.prix - a.prix).map((pkg) => {
+                    const isVIP = pkg.prix >= 1400;
+                    const isRecommended = pkg.prix >= 900 && pkg.prix < 1400;
+                    const isBasic = pkg.prix < 900;
                     
-                    const colorClasses = index % 3 === 0 
-                      ? 'from-blue-600 to-cyan-700 shadow-blue-900/20 ring-blue-400' 
-                      : index % 3 === 1 
-                        ? 'from-[#006837] to-emerald-700 shadow-emerald-900/20 ring-emerald-400'
-                        : 'from-purple-600 to-fuchsia-700 shadow-purple-900/20 ring-fuchsia-400';
+                    const colorClasses = isVIP 
+                      ? 'from-indigo-700 to-purple-800 shadow-indigo-900/20 ring-indigo-500' 
+                      : isRecommended 
+                        ? 'from-amber-500 to-orange-600 shadow-amber-900/20 ring-amber-400'
+                        : 'from-slate-700 to-slate-800 shadow-slate-900/20 ring-slate-500';
 
                     return (
                     <div key={pkg.id} className={`relative overflow-hidden rounded-2xl md:rounded-[2rem] p-2 md:p-8 flex flex-col justify-between items-center md:items-stretch transition-all group hover:-translate-y-1 hover:shadow-2xl text-white bg-gradient-to-br ${colorClasses} ${isRecommended ? 'ring-2 md:ring-4 md:scale-105 z-10' : ''}`}>
                       
                       {isRecommended && (
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-white text-gray-900 text-[8px] md:text-[10px] font-black uppercase tracking-widest px-2 py-0.5 md:px-4 md:py-1.5 rounded-b-lg md:rounded-b-xl z-20 shadow-sm flex items-center gap-1 w-max">
-                          <Star className="w-2 h-2 md:w-3 md:h-3 fill-yellow-400 text-yellow-400" /> <span className="hidden sm:inline">Recommandé</span><span className="sm:hidden">Top</span>
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-white text-amber-600 text-[8px] md:text-[10px] font-black uppercase tracking-widest px-2 py-0.5 md:px-4 md:py-1.5 rounded-b-lg md:rounded-b-xl z-20 shadow-sm flex items-center gap-1 w-max">
+                          <Star className="w-2 h-2 md:w-3 md:h-3 fill-amber-500 text-amber-500" /> <span className="hidden sm:inline">Choix N°1</span><span className="sm:hidden">Top</span>
+                        </div>
+                      )}
+                      {isVIP && (
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-white text-indigo-700 text-[8px] md:text-[10px] font-black uppercase tracking-widest px-2 py-0.5 md:px-4 md:py-1.5 rounded-b-lg md:rounded-b-xl z-20 shadow-sm flex items-center gap-1 w-max">
+                          <Crown className="w-2 h-2 md:w-3 md:h-3 fill-indigo-600 text-indigo-600" /> <span className="hidden sm:inline">Ultra Rapide</span><span className="sm:hidden">VIP</span>
                         </div>
                       )}
                       
@@ -615,7 +622,7 @@ export function CandidateDashboard() {
                               {pkg.prix !== 0 && <span className="text-[8px] md:text-lg font-bold opacity-80">FCFA</span>}
                            </div>
                            <div className="text-[7px] md:text-[10px] font-bold uppercase tracking-widest mt-0.5 md:mt-1 opacity-70 line-clamp-1">
-                             {pkg.dureeJours >= 99999 ? 'À vie' : `${pkg.dureeJours} jours`}
+                             {pkg.dureeJours >= 99999 ? (pkg.nom.toLowerCase().includes('starter') ? '' : 'À vie') : `${pkg.dureeJours} jours`}
                            </div>
                         </div>
                         
@@ -682,20 +689,62 @@ export function CandidateDashboard() {
           </div>
           <div className="p-6 bg-slate-50/50">
              <div className="space-y-4">
-               {cvPackages.filter(pkg => pkg.type === 'DEPOT' || pkg.type === 'VISIBILITE').map((pkg) => (
-                 <div key={pkg.id} className="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col gap-3 hover:border-amber-300 hover:shadow-md transition-all cursor-pointer group" onClick={() => handleCheckoutPackage(pkg.id)}>
-                    <div className="flex justify-between items-center">
-                       <div>
-                         <h4 className="font-black text-slate-900 text-base uppercase tracking-tight group-hover:text-amber-600 transition-colors">{pkg.nom}</h4>
-                         <div className="text-lg font-black text-slate-800 mt-1 flex items-baseline gap-1">
+               {cvPackages.filter(pkg => pkg.type === 'DEPOT' || pkg.type === 'VISIBILITE').sort((a, b) => b.prix - a.prix).map((pkg) => {
+                 const isVIP = pkg.prix >= 1400;
+                 const isRecommended = pkg.prix >= 900 && pkg.prix < 1400;
+                 const isBasic = pkg.prix < 900;
+                 
+                 return (
+                 <div key={pkg.id} className={`bg-white border rounded-2xl p-4 md:p-5 flex flex-col gap-3 transition-all cursor-pointer group relative overflow-hidden ${isVIP ? 'border-indigo-500 shadow-xl shadow-indigo-500/20 scale-[1.02] bg-indigo-50/30' : isRecommended ? 'border-amber-400 shadow-lg shadow-amber-500/20 scale-[1.02] bg-amber-50/10' : 'border-slate-200 hover:border-amber-300 hover:shadow-md'}`} onClick={() => handleCheckoutPackage(pkg.id)}>
+                    {isRecommended && (
+                      <div className="absolute top-0 right-0 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-bl-xl z-10 shadow-sm flex items-center gap-1">
+                        <Star className="w-2.5 h-2.5 fill-white" /> 🔥 Choix N°1 (70% des candidats)
+                      </div>
+                    )}
+                    {isVIP && (
+                      <div className="absolute top-0 right-0 bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-bl-xl z-10 shadow-sm flex items-center gap-1">
+                        <Crown className="w-2.5 h-2.5 fill-white" /> 🚀 Ultra Rapide
+                      </div>
+                    )}
+                    <div className="flex justify-between items-center relative z-10">
+                       <div className="flex-1 pr-4">
+                         <h4 className={`font-black uppercase tracking-tight transition-colors ${isVIP ? 'text-indigo-800 text-lg' : isRecommended ? 'text-amber-700 text-lg' : 'text-slate-900 text-base group-hover:text-amber-600'}`}>{pkg.nom}</h4>
+                         <div className="text-lg font-black text-slate-800 mt-0.5 flex items-baseline gap-1">
                             {pkg.prix === 0 ? "Gratuit" : `${pkg.prix} FCFA`}
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">/ {pkg.dureeJours >= 99999 ? 'À vie' : `${pkg.dureeJours} Jours`}</span>
+                            {pkg.dureeJours >= 99999 && pkg.nom.toLowerCase().includes('starter') ? null : <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">/ {pkg.dureeJours >= 99999 ? 'À vie' : `${pkg.dureeJours} Jours`}</span>}
                          </div>
+                         
+                         {isVIP && (
+                           <div className="text-xs font-medium text-indigo-900/80 mt-2">
+                             <div className="mt-1 flex flex-col gap-1">
+                               <div className="flex items-start gap-1.5"><Check className="w-3.5 h-3.5 text-indigo-600 shrink-0 mt-0.5" /> <span><b>Recommandation directe</b> par notre IA aux recruteurs</span></div>
+                               <div className="flex items-start gap-1.5"><Check className="w-3.5 h-3.5 text-indigo-600 shrink-0 mt-0.5" /> <span>Badge exclusif <b>Top Candidat</b></span></div>
+                               <div className="flex items-start gap-1.5"><Check className="w-3.5 h-3.5 text-indigo-600 shrink-0 mt-0.5" /> <span>Tout le contenu du pack Premium</span></div>
+                             </div>
+                           </div>
+                         )}
+                         
+                         {isRecommended && (
+                           <div className="text-xs font-medium text-amber-800/80 mt-2">
+                             <div className="mt-1 flex flex-col gap-1">
+                               <div className="flex items-start gap-1.5"><Check className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" /> <span>Candidatures <b>en tête de liste</b></span></div>
+                               <div className="flex items-start gap-1.5"><Check className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" /> <span>Badge <b>Profil Vérifié</b></span></div>
+                               <div className="flex items-start gap-1.5"><Check className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" /> <span><b>Visibilité Premium</b> dans la CVthèque</span></div>
+                             </div>
+                           </div>
+                         )}
+                         
+                         {isBasic && (
+                           <div className="text-[10px] font-medium text-slate-400 mt-2">
+                             Import simple, visibilité standard.
+                           </div>
+                         )}
                        </div>
-                       <Button size="sm" className="bg-amber-500 hover:bg-amber-600 text-white rounded-xl px-5 h-10 text-[10px] font-black uppercase tracking-widest shadow-lg shadow-amber-500/20">{pkg.prix === 0 ? 'Activer' : 'Acheter'}</Button>
+                       <Button size="sm" className={`shrink-0 text-white rounded-xl px-5 h-10 text-[10px] font-black uppercase tracking-widest ${isVIP ? 'bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-500/20' : isRecommended ? 'bg-amber-500 hover:bg-amber-600 shadow-lg shadow-amber-500/20' : 'bg-slate-800 hover:bg-slate-900 shadow-md'}`}>{pkg.prix === 0 ? 'Activer' : (isVIP ? 'Prendre ce pack' : isRecommended ? 'Choisir ce pack' : 'Acheter')}</Button>
                     </div>
                  </div>
-               ))}
+                 );
+               })}
              </div>
           </div>
         </DialogContent>

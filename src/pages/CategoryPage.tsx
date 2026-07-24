@@ -301,7 +301,7 @@ export function CategoryPage() {
            <AdBanner slot="3384697577" />
            
            <div className="sticky top-24 space-y-12">
-             <SidebarWidgets />
+             <SidebarWidgets hideWhatsApp={true} />
              <AdBanner slot="5682206784" />
            </div>
         </aside>
